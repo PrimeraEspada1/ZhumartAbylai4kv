@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Заявки | RepairHub Django{% endblock %}
+
+{% block content %}
+<main>
+    <section class="section-card">
+        <p class="eyebrow">Список заявок</p>
+        <h2>Заявки на ремонт и обслуживание</h2>
+        <p class="muted">Эта страница показывает вывод данных модели из базы данных через шаблоны Django.</p>
+
+        <div class="request-grid">
+            {% for request in service_requests %}
+                <a class="request-card" href="{% url 'service_request_detail' request.id %}">
+                    <span class="status-badge status-{{ request.status }}">{{ request.get_status_display }}</span>
+                    <h3>{{ request.title }}</h3>
+                    <p>{{ request.customer_name }} · {{ request.get_device_type_display }}</p>
+                    <p class="muted">{{ request.problem_description|truncatechars:120 }}</p>
+                    <strong>{{ request.estimated_price }} ₸</strong>
+                </a>
+            {% empty %}
+                <div class="request-card">
+                    <h3>Записей пока нет</h3>
+                    <p class="muted">Создайте записи в админке, чтобы они появились на этой странице.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

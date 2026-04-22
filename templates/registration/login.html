@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Вход | RepairHub Django{% endblock %}
+
+{% block content %}
+<main class="single-column">
+    <section class="section-card form-card">
+        <p class="eyebrow">Вход</p>
+        <h2>Авторизация пользователя</h2>
+        <p class="muted">Используйте логин и пароль, созданные при регистрации.</p>
+
+        <form method="post" class="stack-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <small class="error-text">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <small class="error-text">{{ error }}</small>
+                {% endfor %}
+            {% endif %}
+            <button type="submit">Войти</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
