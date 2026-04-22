@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Диагностика и аналитика | CompRepair Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="brand-lockup">
+                <a class="brand-mark" href="index.html">CR</a>
+                <div>
+                    <p class="eyebrow">Практика и анализ интерфейсов</p>
+                    <h1>Диагностика и HCI-аналитика</h1>
+                </div>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">Главная</a>
+                <a href="blog.html">База знаний</a>
+                <a href="practice3.html" class="active">Диагностика</a>
+                <a href="auth.html">Личный кабинет</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero-card compact-hero">
+                <div class="hero-copy">
+                    <p class="section-kicker">Лабораторная часть проекта</p>
+                    <h2>Здесь собраны расчёты эффективности интерфейсов и серверный калькулятор на Python</h2>
+                    <p class="hero-text">
+                        Страница осталась учебной по сути, но теперь выглядит как часть общего сайта сервисного центра.
+                        Через форму ниже по-прежнему работает CGI-скрипт расчёта по законам Фиттса и Хика.
+                    </p>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Интерактивный инструмент</p>
+                    <h2>Калькулятор HCI-показателей</h2>
+                </div>
+                <form action="/cgi-bin/hci_calc.py" method="get" class="tools-grid">
+                    <article class="tool-card">
+                        <h3>Закон Фиттса</h3>
+                        <label for="dist">Расстояние до элемента, px</label>
+                        <input id="dist" type="number" name="dist" value="754" required>
+                        <label for="width">Ширина цели, px</label>
+                        <input id="width" type="number" name="width" value="196" required>
+                        <input type="hidden" name="a_const" value="0.2">
+                        <input type="hidden" name="b_fitts" value="0.1">
+                    </article>
+
+                    <article class="tool-card">
+                        <h3>Закон Хика</h3>
+                        <label for="n_options">Количество вариантов</label>
+                        <input id="n_options" type="number" name="n_options" value="7" required>
+                        <label for="b_hick">Коэффициент b</label>
+                        <input id="b_hick" type="number" step="0.01" name="b_hick" value="0.15" required>
+                        <button type="submit" class="button-accent">Выполнить расчёт на Python</button>
+                    </article>
+                </form>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Краткий отчёт</p>
+                    <h2>Что показывают расчёты</h2>
+                </div>
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <h3>Форма регистрации</h3>
+                        <p>Среднее время прохождения составляет 17.9 секунды, а заметная доля ошибок говорит о необходимости более явных подсказок и обратной связи.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Размещение кнопок</h3>
+                        <p>Крупные и хорошо заметные кнопки сокращают время наведения, поэтому ключевые действия стоит делать контрастными и визуально доминирующими.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Навигация и выбор</h3>
+                        <p>Чем больше равнозначных вариантов получает пользователь, тем дольше он принимает решение, поэтому меню лучше группировать и упрощать.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Практический вывод</h3>
+                        <p>Даже учебный сервисный сайт выигрывает от чистой структуры: одна тема, один стиль и понятные пользовательские сценарии.</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>CGI-калькулятор сохранён и встроен в новую структуру сайта без потери работоспособности.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,490 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompRepair Lab | Ремонт и обслуживание компьютеров</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="brand-lockup">
+                <a class="brand-mark" href="{% url 'home' %}">CR</a>
+                <div>
+                    <p class="eyebrow">Сервисный центр и учебный проект</p>
+                    <h1>CompRepair Lab</h1>
+                </div>
+            </div>
+            <nav class="site-nav">
+                <a href="{% url 'home' %}" class="active">Главная</a>
+                <a href="{% url 'blog' %}">База знаний</a>
+                <a href="{% url 'profile' %}">Личный кабинет</a>
+                <a href="/admin/">Админка</a>
+                <a href="/cgi-bin/password_gen.py">Генератор паролей</a>
+            </nav>
+        </header>
+
+        <main>
+            {% if messages %}
+                <div class="message-stack" style="margin-bottom: 24px;">
+                    {% for message in messages %}
+                        <div class="feature-card" style="padding: 15px; border-color: rgba(47, 133, 90, 0.32); background: rgba(47, 133, 90, 0.05); color: #2f855a; font-weight: bold;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <section class="hero-card">
+                <div class="hero-copy">
+                    <p class="section-kicker">Ремонт ПК, ноутбуков и настройка систем</p>
+                    <h2>Сайт по теме ремонта компьютеров с удобной навигацией и рабочими инструментами</h2>
+                    <p class="hero-text">
+                        На сайте собраны основные разделы по теме сервисного обслуживания компьютеров: форма заявки,
+                        проверка и генерация пароля, простые CGI-инструменты на Python и отдельная страница с материалами по HCI.
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button-link" href="{% url 'profile' %}">Открыть кабинет клиента</a>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <div class="status-card">
+                        <span>Экспресс-диагностика</span>
+                        <strong>15 минут</strong>
+                        <p>Проверка перегрева, памяти, накопителя и автозагрузки.</p>
+                    </div>
+                    <div class="status-card">
+                        <span>Срочный ремонт</span>
+                        <strong>В день обращения</strong>
+                        <p>Замена комплектующих, чистка, установка системы и драйверов.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Что мы делаем</p>
+                    <h2>Услуги сервиса</h2>
+                </div>
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <h3>Ремонт железа</h3>
+                        <p>Диагностируем неисправности блока питания, материнской платы, SSD, RAM и видеокарты.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Программная настройка</h3>
+                        <p>Устанавливаем Windows, драйверы, антивирусы и настраиваем рабочее окружение после ремонта.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Профилактика</h3>
+                        <p>Чистка от пыли, замена термопасты, проверка температур и повышение стабильности системы.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Консультации</h3>
+                        <p>Подбираем конфигурации под игры, учёбу, монтаж, офис и домашнее использование.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Онлайн-инструменты</p>
+                    <h2>Рабочие Python формы</h2>
+                </div>
+                <div class="tools-grid">
+                    <article class="tool-card" id="pc-builder-card">
+                        <h3>Подбор сборки ПК</h3>
+                        <p>Выберите бюджет и задачи, чтобы получить рекомендацию.</p>
+                        <form id="pcBuilderForm">
+                            <label for="build_budget">Бюджет</label>
+                            <select id="build_budget" required>
+                                <option value="low">До 250 000 ₸</option>
+                                <option value="mid">До 500 000 ₸</option>
+                                <option value="high">От 700 000 ₸ и выше</option>
+                            </select>
+
+                            <label for="build_purpose">Основная задача</label>
+                            <select id="build_purpose" required>
+                                <option value="office">Офис, учеба, фильмы</option>
+                                <option value="gaming">Современные игры</option>
+                                <option value="work">Рендер, 3D, монтаж</option>
+                            </select>
+
+                            <button type="button" onclick="recommendBuild()" style="margin-top: 10px;">Подобрать</button>
+                        </form>
+                        <div id="build_result" style="display:none; margin-top:15px; padding:10px; background:rgba(47,133,90,0.1); border-radius:6px; font-size:14px; border: 1px solid rgba(47,133,90,0.3);">
+                            <strong style="color: var(--accent);">Рекомендация:</strong>
+                            <p id="build_text" style="margin-top:5px; margin-bottom:0;"></p>
+                        </div>
+                    </article>
+
+                    <article class="tool-card">
+                        <h3>Заявка на обслуживание</h3>
+                        <p>Форма уходит в базу данных (Django Admin) и сразу доступна менеджеру.</p>
+                        <form action="{% url 'submit_request' %}" method="post">
+                            {% csrf_token %}
+                            <label for="title">Название проблемы</label>
+                            <input id="title" type="text" name="title" placeholder="Кратко о проблеме" required>
+                            
+                            <label for="customer_name">Ваше имя</label>
+                            <input id="customer_name" type="text" name="customer_name" placeholder="Иван" required>
+                            
+                            <label for="device_type">Тип устройства</label>
+                            <select id="device_type" name="device_type" required>
+                                <option value="pc">Стационарный ПК</option>
+                                <option value="laptop">Ноутбук</option>
+                                <option value="monoblock">Моноблок</option>
+                                <option value="other">Другое устройство</option>
+                            </select>
+
+                            <label for="service_action">Тип услуги</label>
+                            <select id="service_action" name="service_action" required onchange="updatePrice()">
+                                <option value="diagnostics" data-price="5000">Очистка и диагностика</option>
+                                <option value="replacement" data-price="8000">Замена комплектующих</option>
+                                <option value="os_install" data-price="6000">Установка ОС и программ</option>
+                                <option value="other" data-price="0">Другое / Не знаю</option>
+                            </select>
+                            
+                            <label for="problem_description">Описание</label>
+                            <input id="problem_description" type="text" name="problem_description" placeholder="Детали поломки" required>
+
+                            <p style="margin: 10px 0; font-weight: bold; color: var(--accent);">Оценочная стоимость: <span id="price_display">5000</span> ₸</p>
+
+                            <button type="submit" style="margin-top: 10px;">Отправить заявку</button>
+                        </form>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">AI-помощник</p>
+                    <h2>Чат-бот по ремонту и диагностике компьютеров</h2>
+                    <p>Бот подсказывает, что проверить при перегреве, тормозах, шуме, ошибках Windows и вопросах по апгрейду.</p>
+                </div>
+                <div class="chatbot-layout">
+                    <div class="chatbot-panel">
+                        <div class="chatbot-chips">
+                            <button type="button" class="chip-button" data-prompt="Компьютер сильно шумит и греется. Что проверить в первую очередь?">Перегрев и шум</button>
+                            <button type="button" class="chip-button" data-prompt="ПК стал медленно работать после включения. Какие причины самые частые?">Медленная работа ПК</button>
+                            <button type="button" class="chip-button" data-prompt="Что лучше обновить первым для ускорения компьютера: SSD или RAM?">SSD или RAM</button>
+                            <button type="button" class="chip-button" data-prompt="Ноутбук выключается через несколько минут работы. Что это может быть?">Ноутбук выключается</button>
+                        </div>
+                        <div id="chatMessages" class="chat-messages">
+                            <article class="chat-bubble chat-bubble-bot">
+                                <strong>AI-мастер</strong>
+                                <p>Опишите проблему с компьютером или ноутбуком. Например: "ПК зависает в играх", "ноутбук греется", "хочу поставить SSD".</p>
+                            </article>
+                        </div>
+                        <form id="chatForm" class="chat-form">
+                            <label for="chatInput">Ваш вопрос</label>
+                            <textarea id="chatInput" rows="4" placeholder="Например: после чистки компьютер стал шуметь сильнее, что проверить?" required></textarea>
+                            <button type="submit" class="button-accent">Спросить у бота</button>
+                        </form>
+                    </div>
+                    <aside class="chatbot-info">
+                        <div class="sidebar-note">
+                            <h3>Чем полезен</h3>
+                            <p>Помогает понять вероятные причины проблемы, предлагает базовые шаги диагностики и подсказывает, когда лучше обращаться в сервис.</p>
+                        </div>
+                        <div class="sidebar-note">
+                            <h3>Подходит для тем</h3>
+                            <p>Перегрев, апгрейд, синий экран, шум, медленная загрузка, выбор SSD, RAM и блока питания.</p>
+                        </div>
+                        <div class="sidebar-note">
+                            <h3>Важно</h3>
+                            <p>Ответы бота не заменяют реальную диагностику. Если есть запах гари, пропадают данные или устройство не включается, лучше прекратить использование.</p>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Материалы для клиента</p>
+                    <h2>Полезные файлы и инструкции</h2>
+                    <p>Выберите нужные материалы для скачивания: схема, мануал и архив драйверов.</p>
+                </div>
+                <form id="downloadForm" class="download-list">
+                    <label class="file-item">
+                        <input type="checkbox" name="file" value="https://images.unsplash.com/photo-1518770660439-4636190af475" data-name="cpu_architecture.jpg">
+                        <span>Схема архитектуры CPU</span>
+                    </label>
+                    <label class="file-item">
+                        <input type="checkbox" name="file" value="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" data-name="motherboard_manual.pdf">
+                        <span>Инструкция по материнской плате</span>
+                    </label>
+                    <label class="file-item">
+                        <input type="checkbox" name="file" value="https://raw.githubusercontent.com/mathiasbynens/small/master/zip.zip" data-name="drivers_pack.zip">
+                        <span>Архив драйверов и утилит</span>
+                    </label>
+                    <button type="button" class="button-accent" onclick="startDownload()">Скачать выбранные файлы</button>
+                </form>
+            </section>
+
+            <section class="section-card">
+                <div class="section-heading">
+                    <p class="section-kicker">Мини-тест</p>
+                    <h2>Проверьте знания по компьютерному ремонту</h2>
+                </div>
+                <form id="quizForm" class="quiz-layout">
+                    <div class="quiz-question" id="block1">
+                        <p>1. Какой компонент называют сердцем компьютера?</p>
+                        <label><input type="radio" name="q1" value="1"> Блок питания</label>
+                        <label><input type="radio" name="q1" value="correct"> Процессор</label>
+                        <label><input type="radio" name="q1" value="3"> Модем</label>
+                        <div class="feedback">Верный ответ: процессор.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block2">
+                        <p>2. Где данные сохраняются после выключения питания?</p>
+                        <select id="q2">
+                            <option value="0">Выберите ответ</option>
+                            <option value="1">Оперативная память</option>
+                            <option value="correct">SSD или HDD</option>
+                            <option value="3">Кэш L1</option>
+                        </select>
+                        <div class="feedback">Верный ответ: SSD или HDD.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block3">
+                        <p>3. Что отвечает за вывод изображения?</p>
+                        <label><input type="radio" name="q3" value="1"> Сетевая карта</label>
+                        <label><input type="radio" name="q3" value="correct"> Видеокарта</label>
+                        <label><input type="radio" name="q3" value="3"> Звуковая карта</label>
+                        <div class="feedback">Верный ответ: видеокарта.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block4">
+                        <p>4. Сколько бит в одном байте?</p>
+                        <input type="number" id="q4" placeholder="Введите число">
+                        <div class="feedback">Верный ответ: 8.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block5">
+                        <p>5. Введите английскую аббревиатуру оперативной памяти.</p>
+                        <input type="text" id="q5" placeholder="Например, CPU">
+                        <div class="feedback">Верный ответ: RAM.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block6">
+                        <p>6. Что обычно используют для охлаждения процессора?</p>
+                        <label><input type="radio" name="q6" value="1"> Клавиатуру</label>
+                        <label><input type="radio" name="q6" value="correct"> Радиатор и кулер</label>
+                        <label><input type="radio" name="q6" value="3"> Колонки</label>
+                        <div class="feedback">Верный ответ: радиатор и кулер.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block7">
+                        <p>7. Выберите производителя процессоров.</p>
+                        <label><input type="checkbox" name="q7" value="correct"> Intel</label>
+                        <label><input type="checkbox" name="q7" value="2"> Logitech</label>
+                        <label><input type="checkbox" name="q7" value="3"> Canon</label>
+                        <div class="feedback">Верный ответ: Intel.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block8">
+                        <p>8. Какая плата объединяет основные компоненты ПК?</p>
+                        <select id="q8">
+                            <option value="0">Выберите ответ</option>
+                            <option value="1">Плата расширения</option>
+                            <option value="correct">Материнская плата</option>
+                        </select>
+                        <div class="feedback">Верный ответ: материнская плата.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block9">
+                        <p>9. Какой объём RAM сегодня можно считать разумным минимумом для игр?</p>
+                        <input type="range" id="q9" min="4" max="64" step="4" value="16" oninput="v9.innerText=this.value">
+                        <span><strong id="v9">16</strong> ГБ</span>
+                        <div class="feedback">Обычно ориентируются на 16 ГБ и выше.</div>
+                    </div>
+
+                    <div class="quiz-question" id="block10">
+                        <p>10. Что означает сокращение HDD?</p>
+                        <label><input type="radio" name="q10" value="1"> High Density Disk</label>
+                        <label><input type="radio" name="q10" value="correct"> Hard Disk Drive</label>
+                        <label><input type="radio" name="q10" value="3"> Hybrid Data Drive</label>
+                        <div class="feedback">Верный ответ: Hard Disk Drive.</div>
+                    </div>
+
+                    <button type="button" class="button-accent" onclick="checkQuiz()">Проверить ответы</button>
+                </form>
+                <div id="result" class="quiz-result"></div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>CompRepair Lab объединяет учебные задания в полноценный сайт сервисного центра с базой данных Django.</p>
+        </footer>
+    </div>
+
+    <script>
+        async function downloadFile(url, fileName) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const objectURL = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = objectURL;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(objectURL);
+            } catch (error) {
+                console.error("Ошибка загрузки:", error);
+                window.open(url, "_blank");
+            }
+        }
+
+        function startDownload() {
+            const selected = document.querySelectorAll('input[name="file"]:checked');
+            if (!selected.length) {
+                alert("Выберите хотя бы один файл.");
+                return;
+            }
+
+            selected.forEach((checkbox) => {
+                downloadFile(checkbox.value, checkbox.getAttribute("data-name"));
+            });
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            const total = 10;
+
+            document.querySelectorAll(".quiz-question").forEach((question) => {
+                question.classList.remove("correct", "wrong");
+                question.querySelector(".feedback").style.display = "block";
+            });
+
+            const checks = [
+                { id: "block1", condition: document.querySelector('input[name="q1"]:checked')?.value === "correct" },
+                { id: "block2", condition: document.getElementById("q2").value === "correct" },
+                { id: "block3", condition: document.querySelector('input[name="q3"]:checked')?.value === "correct" },
+                { id: "block4", condition: document.getElementById("q4").value === "8" },
+                { id: "block5", condition: document.getElementById("q5").value.trim().toLowerCase() === "ram" },
+                { id: "block6", condition: document.querySelector('input[name="q6"]:checked')?.value === "correct" },
+                {
+                    id: "block7",
+                    condition:
+                        document.querySelectorAll('input[name="q7"]:checked').length === 1 &&
+                        document.querySelector('input[name="q7"]:checked')?.value === "correct"
+                },
+                { id: "block8", condition: document.getElementById("q8").value === "correct" },
+                { id: "block9", condition: Number(document.getElementById("q9").value) >= 16 },
+                { id: "block10", condition: document.querySelector('input[name="q10"]:checked')?.value === "correct" }
+            ];
+
+            checks.forEach((item) => {
+                const block = document.getElementById(item.id);
+                if (item.condition) {
+                    score += 1;
+                    block.classList.add("correct");
+                } else {
+                    block.classList.add("wrong");
+                }
+            });
+
+            document.getElementById("result").innerText = `Ваш результат: ${score} из ${total}`;
+        }
+
+        const chatMessages = document.getElementById("chatMessages");
+        const chatForm = document.getElementById("chatForm");
+        const chatInput = document.getElementById("chatInput");
+
+        function appendMessage(role, text) {
+            const bubble = document.createElement("article");
+            bubble.className = role === "user" ? "chat-bubble chat-bubble-user" : "chat-bubble chat-bubble-bot";
+
+            const title = document.createElement("strong");
+            title.textContent = role === "user" ? "Вы" : "AI-мастер";
+
+            const body = document.createElement("p");
+            body.textContent = text;
+
+            bubble.appendChild(title);
+            bubble.appendChild(body);
+            chatMessages.appendChild(bubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function askChatbot(message) {
+            appendMessage("user", message);
+            appendMessage("bot", "Думаю над ответом...");
+
+            const pending = chatMessages.lastElementChild;
+
+            try {
+                const response = await fetch("{% url 'chatbot' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+                const fullReply = data.details ? `${data.reply}\n\nДетали: ${data.details}` : data.reply;
+                pending.querySelector("p").textContent = fullReply || "Не удалось получить ответ.";
+            } catch (error) {
+                pending.querySelector("p").textContent = "Не удалось связаться с ботом. Проверьте настройку CGI и ключ API на сервере.";
+            }
+        }
+
+        document.querySelectorAll(".chip-button").forEach((button) => {
+            button.addEventListener("click", () => {
+                const prompt = button.getAttribute("data-prompt");
+                chatInput.value = prompt;
+                askChatbot(prompt);
+            });
+        });
+
+        chatForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) {
+                return;
+            }
+
+            askChatbot(message);
+            chatInput.value = "";
+        });
+
+        function updatePrice() {
+            const select = document.getElementById('service_action');
+            if (select) {
+                const price = select.options[select.selectedIndex].getAttribute('data-price');
+                document.getElementById('price_display').textContent = price;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", updatePrice);
+
+        function recommendBuild() {
+            const budget = document.getElementById("build_budget").value;
+            const purpose = document.getElementById("build_purpose").value;
+            let result = "";
+
+            if (purpose === "office") {
+                if (budget === "low") result = "Мини-ПК или сборка на базе AMD Ryzen 5 5600G со встроенной графикой. 16 ГБ RAM, 512 ГБ SSD. Идеально для работы и учебы без переплат.";
+                else if (budget === "mid") result = "Сборка на Intel Core i5-12400 с 1 ТБ быстрым SSD и 16 ГБ RAM. Обеспечит моментальную загрузку любых офисных программ и полную тишину.";
+                else result = "Премиальный компактный ПК на базе Mac Mini (M2) или кастомная тихая сборка с пассивным охлаждением и топовым дизайном корпуса.";
+            } else if (purpose === "gaming") {
+                if (budget === "low") result = "Сборка начального уровня: Intel Core i3-12100F + GTX 1650 / RX 6500 XT. Потянет киберспорт (CS2, Dota) и старые хиты на средних настройках.";
+                else if (budget === "mid") result = "Оптимальный гейминг: AMD Ryzen 5 5600 + RTX 4060. Позволит играть во все современные новинки на высоких настройках в Full HD.";
+                else result = "Ультимативное решение: AMD Ryzen 7 7800X3D + RTX 4080 Super / 4090. Максимум FPS в 4K и бескомпромиссная графика с трассировкой лучей.";
+            } else if (purpose === "work") {
+                if (budget === "low") result = "Бюджетная рабочая станция: Intel Core i5-10400F + 32 ГБ недорогой RAM + RTX 3050 (для CUDA-ускорения).";
+                else if (budget === "mid") result = "Уверенная работа: Intel Core i5-13600K + 32 ГБ DDR5 + RTX 4060 Ti 16GB. Отличный баланс для видеомонтажа и 3D-моделирования.";
+                else result = "Профессиональная станция: Intel Core i9-14900K или Threadripper + 64/128 ГБ RAM + RTX 4090. Для сложнейшего рендера и тяжелых проектов.";
+            }
+
+            document.getElementById("build_text").textContent = result;
+            document.getElementById("build_result").style.display = "block";
+        }
+    </script>
+</body>
+</html>

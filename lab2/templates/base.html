@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RepairHub Django{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'django/css/site.css' %}">
+    <script>
+        const savedTheme = localStorage.getItem("repairhub-theme");
+        if (savedTheme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
+    </script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="brand">
+                <a class="brand-mark" href="{% url 'home' %}">RH</a>
+                <div>
+                    <p class="eyebrow">Лабораторная работа 4</p>
+                    <h1>RepairHub Django</h1>
+                </div>
+            </div>
+            <nav class="site-nav">
+                <a href="{% url 'home' %}">Домашняя</a>
+                <a href="{% url 'service_requests' %}">Заявки</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">Профиль</a>
+                    <a href="{% url 'logout' %}">Выход</a>
+                {% else %}
+                    <a href="{% url 'register' %}">Регистрация</a>
+                    <a href="{% url 'login' %}">Вход</a>
+                {% endif %}
+                <a href="/admin/">Админка</a>
+                <button type="button" class="theme-toggle" id="themeToggle">Сменить тему</button>
+            </nav>
+        </header>
+
+        {% if messages %}
+            <section class="message-stack">
+                {% for message in messages %}
+                    <div class="message-card">{{ message }}</div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        const toggleButton = document.getElementById("themeToggle");
+        if (toggleButton) {
+            toggleButton.addEventListener("click", () => {
+                const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+                if (isDark) {
+                    document.documentElement.removeAttribute("data-theme");
+                    localStorage.setItem("repairhub-theme", "light");
+                } else {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                    localStorage.setItem("repairhub-theme", "dark");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
