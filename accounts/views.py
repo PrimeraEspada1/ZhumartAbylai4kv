@@ -3,7 +3,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 import json
 import os
@@ -16,13 +17,18 @@ from .models import ServiceRequest
 def home(request):
     return render(request, "index.html")
 
+def create_admin(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin1234')
+        return HttpResponse("Администратор 'admin' с паролем 'admin1234' успешно создан! Можете заходить в /admin/")
+    return HttpResponse("Администратор 'admin' уже существует.")
+
 @csrf_exempt
 def chatbot_view(request):
     if request.method != "POST":
         return JsonResponse({"reply": "Only POST requests are allowed"}, status=405)
         
-    GROQ_API_KEY = "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"
-    api_key = os.environ.get("GROQ_API_KEY", "").strip() or GROQ_API_KEY
+    api_key = os.environ.get("GROQ_API_KEY", "").strip()
     if not api_key:
         return JsonResponse({"reply": "Чат-бот пока не настроен: не найден ключ для доступа к Groq API."}, status=500)
 

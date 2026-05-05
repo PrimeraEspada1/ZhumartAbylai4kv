@@ -12,6 +12,7 @@ from .views import (
     practice3_view,
     submit_request,
     chatbot_view,
+    create_admin,
 )
 
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path("practice3/", practice3_view, name="practice3"),
     path("submit-request/", submit_request, name="submit_request"),
     path("chatbot/", chatbot_view, name="chatbot"),
+    path("create-admin/", create_admin, name="create_admin"),
     path("register/", register_view, name="register"),
     path("login/", UserLoginView.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),

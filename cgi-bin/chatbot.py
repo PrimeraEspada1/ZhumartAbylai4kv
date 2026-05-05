@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "").strip()
 
 
 if sys.platform == "win32":
@@ -35,7 +35,7 @@ def load_request_data():
         return {}
 
 
-api_key = os.environ.get("GROQ_API_KEY", "").strip() or GROQ_API_KEY
+api_key = GROQ_API_KEY
 if not api_key:
     print_json(
         {
